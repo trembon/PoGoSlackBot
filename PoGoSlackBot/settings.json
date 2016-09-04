@@ -1,0 +1,27 @@
+﻿{
+  "MapURLFormat": "http://maps.google.com/?q={0},{1}",
+  "ImageURLFormat": "http://some.site.com/pokemon_images/{0}.png",
+  "Instances": [
+    {
+      "Name": "Name of the instance",
+      "LoginProvider": "GoogleAuth or PokemonTrainerClub",
+      "Username": "exampel",
+      "Password": "superSecretPassword1!",
+      "ProcessNearbyPokemon": true,
+      "ProcessGyms": true,
+      "SlackWebHookURL": "https://hooks.slack.com/services/[randomletts]",
+      "SlackChannel": "#pokemongo",
+      "SlackBotName": "Pokemon GO Scanner",
+      "WalkingPoints": [
+        {
+          "Latitude": 40.766844,
+          "Longitude": -73.979166
+        },
+        {
+          "Latitude": 40.767169,
+          "Longitude": -73.979928
+        }
+      ]
+    }
+  ]
+}
