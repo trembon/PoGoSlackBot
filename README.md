@@ -1,6 +1,13 @@
 # PoGoSlackBot
 
-Example configuration
+Learning project for Pokemon Go & Slack to check for spawns around the work office and check the status of "our" gym.
+Requires .Net Framework 4.6
+
+Using [POGOLib](https://github.com/AeonLucid/POGOLib) and [Slack.Webhooks](https://github.com/nerdfury/Slack.Webhooks) to interact with the services.
+
+Can be installed as a Windows Server with the [InstallUtil](https://msdn.microsoft.com/en-us/library/sd8zc8ha(v=vs.110).aspx) command.
+
+###Example configuration
 ```
 {
   "MapURLFormat": "http://maps.google.com/?q={0},{1}",
@@ -16,7 +23,7 @@ Example configuration
       "SlackWebHookURL": "https://hooks.slack.com/services/[randomletts]", - the slack webhook url to send messages to
       "SlackChannel": "#pokemongo", - name of the slack channel
       "SlackBotName": "Pokemon GO Scanner", - name of the bot in slack
-      "WalkingPoints": [ - walking points, will run in a loop
+      "WalkingPoints": [ - walking points, will run in a loop like 1,2,3,1,2,3
         {
           "Latitude": 40.766844,
           "Longitude": -73.979166
@@ -24,6 +31,10 @@ Example configuration
         {
           "Latitude": 40.767169,
           "Longitude": -73.979928
+        },
+        {
+          "Latitude": 40.767169,
+          "Longitude": -73.979938
         }
       ]
     }
