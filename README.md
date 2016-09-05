@@ -7,7 +7,14 @@ Using [POGOLib](https://github.com/AeonLucid/POGOLib) and [Slack.Webhooks](https
 
 Can be installed as a Windows Server with the [InstallUtil](https://msdn.microsoft.com/en-us/library/sd8zc8ha(v=vs.110).aspx) command.
 
-###Example configuration
+###Printscreens
+
+![Spawns](http://pokemon.trembon.se/slackbot1.png)
+
+![Gyms](http://pokemon.trembon.se/slackbot2.png)
+
+
+###Example configuration (settings.json)
 ```
 {
   "MapURLFormat": "http://maps.google.com/?q={0},{1}",
