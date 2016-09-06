@@ -5,7 +5,7 @@ Requires .Net Framework 4.6
 
 Using [POGOLib](https://github.com/AeonLucid/POGOLib) and [Slack.Webhooks](https://github.com/nerdfury/Slack.Webhooks) to interact with the services.
 
-Can be installed as a Windows Server with the [InstallUtil](https://msdn.microsoft.com/en-us/library/sd8zc8ha(v=vs.110).aspx) command.
+Can be installed as a Windows service with the [InstallUtil](https://msdn.microsoft.com/en-us/library/sd8zc8ha(v=vs.110).aspx) command.
 
 ###Printscreens
 
