@@ -1,6 +1,7 @@
 ﻿using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PoGoSlackBot.Configuration;
+using PoGoSlackBot.Entities;
 using PoGoSlackBot.Extensions;
 using Slack.Webhooks;
 using System;
@@ -13,12 +14,10 @@ namespace PoGoSlackBot.Messages.Gym
 {
     public class GymHasBeenTakenMessage: BaseMessage
     {
-        private FortData mapGymData;
-        private FortDetailsResponse gymDetails;
+        private GymDetails gymDetails;
 
-        public GymHasBeenTakenMessage(FortData mapGymData, FortDetailsResponse gymDetails, InstanceConfiguration configuration) : base(configuration)
+        public GymHasBeenTakenMessage(GymDetails gymDetails, InstanceConfiguration configuration) : base(configuration)
         {
-            this.mapGymData = mapGymData;
             this.gymDetails = gymDetails;
         }
 
@@ -29,24 +28,24 @@ namespace PoGoSlackBot.Messages.Gym
             var slackAttachment = new SlackAttachment
             {
                 Color = "#0000FF",
-                Fallback = String.Format("Gym, {0}, has been taken by {1}!", gymDetails.Name, mapGymData.OwnedByTeam.ToTeamName()),
+                Fallback = String.Format("Gym, {0}, has been taken by {1}!", gymDetails.Name, gymDetails.Owner.ToTeamName()),
 
                 AuthorName = String.Format("Gym, {0}, has been taken!", gymDetails.Name),
 
-                ThumbUrl = gymDetails.ImageUrls.FirstOrDefault(),
+                ThumbUrl = gymDetails.ImageURL,
                 
                 Fields = new List<SlackField>
                 {
                     new SlackField
                     {
                         Title = "Owner",
-                        Value = mapGymData.OwnedByTeam.ToTeamName(),
+                        Value = gymDetails.Owner.ToTeamName(),
                         Short = true
                     },
                     new SlackField
                     {
                         Title = "Strongest Pokemon",
-                        Value = mapGymData.GuardPokemonId.ToString(),
+                        Value = gymDetails.StrongestPokemon.ToString(),
                         Short = true
                     }
                 }

@@ -20,7 +20,7 @@ namespace PoGoSlackBot
             {
                 instance.MainConfiguration = config;
 
-                var walker = new Walker(instance.WalkingPoints);
+                var walker = new Walker(instance.Name, instance.WalkingPoints);
                 var startPosition = walker.GetNextPosition();
 
                 var session = Login.GetSession(instance.Username, instance.Password, instance.LoginProvider, startPosition.Latitude, startPosition.Longitude);
@@ -39,7 +39,5 @@ namespace PoGoSlackBot
         {
             pogoInstances.ForEach(i => i.Session.Shutdown());
         }
-
-        
     }
 }

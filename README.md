@@ -14,6 +14,11 @@ Can be installed as a Windows service with the [InstallUtil](https://msdn.micros
 ![Gyms](http://pokemon.trembon.se/slackbot2.png)
 
 
+### Known bugs
+
+- The app sometimes crashes due to invalid responses in POGOLib
+
+
 ###Example configuration (settings.json)
 ```
 {

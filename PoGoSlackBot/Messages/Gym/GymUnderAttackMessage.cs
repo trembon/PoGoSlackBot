@@ -9,17 +9,16 @@ using Slack.Webhooks;
 using POGOProtos.Networking.Responses;
 using PoGoSlackBot.Extensions;
 using PoGoSlackBot.Configuration;
+using PoGoSlackBot.Entities;
 
 namespace PoGoSlackBot.Messages.Gym
 {
     public class GymUnderAttackMessage : BaseMessage
     {
-        private FortData mapGymData;
-        private FortDetailsResponse gymDetails;
+        private GymDetails gymDetails;
 
-        public GymUnderAttackMessage(FortData mapGymData, FortDetailsResponse gymDetails, InstanceConfiguration configuration) : base(configuration)
+        public GymUnderAttackMessage(GymDetails gymDetails, InstanceConfiguration configuration) : base(configuration)
         {
-            this.mapGymData = mapGymData;
             this.gymDetails = gymDetails;
         }
 
@@ -34,20 +33,20 @@ namespace PoGoSlackBot.Messages.Gym
 
                 AuthorName = String.Format("Gym, {0}, is under attack!", gymDetails.Name),
 
-                ThumbUrl = gymDetails.ImageUrls.FirstOrDefault(),
+                ThumbUrl = gymDetails.ImageURL,
                 
                 Fields = new List<SlackField>
                 {
                     new SlackField
                     {
                         Title = "Owner",
-                        Value = mapGymData.OwnedByTeam.ToTeamName(),
+                        Value = gymDetails.Owner.ToTeamName(),
                         Short = true
                     },
                     new SlackField
                     {
                         Title = "Strongest Pokemon",
-                        Value = mapGymData.GuardPokemonId.ToString(),
+                        Value = gymDetails.StrongestPokemon.ToString(),
                         Short = true
                     }
                 }

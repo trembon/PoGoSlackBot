@@ -16,6 +16,10 @@ namespace PoGoSlackBot.DAL
     {
         public DbSet<SpawnedPokemon> PokemonSpawns { get; set; }
 
+        public DbSet<NearbyPokemon> NearbyPokemons { get; set; }
+
+        public DbSet<GymDetails> GymDetails { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder(this.Database.Connection.ConnectionString);
@@ -29,19 +33,19 @@ namespace PoGoSlackBot.DAL
 
             if (this.Database.Connection.State == ConnectionState.Open)
             {
-                CreateTable(this.Database.Connection);
+                CreateTables(this.Database.Connection);
             }
             else
             {
                 using (var conn = new SQLiteConnection(this.Database.Connection.ConnectionString))
                 {
                     conn.Open();
-                    CreateTable(conn);
+                    CreateTables(conn);
                 }
             }
         }
 
-        private void CreateTable(DbConnection conn)
+        private void CreateTables(DbConnection conn)
         {
             using (var cmd = conn.CreateCommand())
             {
@@ -49,6 +53,20 @@ namespace PoGoSlackBot.DAL
                 if (cmd.ExecuteScalar() == null)
                 {
                     cmd.CommandText = "create table pokemon_spawns(instance VARCHAR(100), pokemon_id int, encounter_id VARCHAR(100), spawn_point_id VARCHAR(100), latitude float, longitude float, despawn datetime, encountered datetime)";
+                    cmd.ExecuteNonQuery();
+                }
+
+                cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='gyms'";
+                if (cmd.ExecuteScalar() == null)
+                {
+                    cmd.CommandText = "create table gyms(instance VARCHAR(100), gym_id VARCHAR(100), name VARCHAR(200), image_url VARCHAR(500), owner int, strongest_pokemon int, is_in_battle int, latitude float, longitude float, last_update datetime)";
+                    cmd.ExecuteNonQuery();
+                }
+
+                cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='pokemon_nearby'";
+                if (cmd.ExecuteScalar() == null)
+                {
+                    cmd.CommandText = "create table pokemon_nearby(instance VARCHAR(100), pokemon_id int, encounter_id VARCHAR(100), scan_latitude float, scan_longitude float, encountered datetime)";
                     cmd.ExecuteNonQuery();
                 }
             }

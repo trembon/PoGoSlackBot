@@ -1,18 +1,22 @@
-﻿using NLog;
+﻿using GeoCoordinatePortable;
+using NLog;
 using System;
 
 namespace PoGoSlackBot.Walking
 {
     public class Walker
     {
-        private static readonly Logger log = LogManager.GetLogger("Walker");
+        private readonly Logger log;
 
-        private int currentPosition;
+        private int currentIndex;
+        private Position currentPosition;
         private PositionList positions;
 
-        public Walker(PositionList positions)
+        public Walker(string instanceName, PositionList positions)
         {
-            this.currentPosition = -1;
+            this.log = LogManager.GetLogger($"Walker ({instanceName})");
+
+            this.currentIndex = -1;
             this.positions = positions;
 
             if (positions == null || positions.Count == 0)
@@ -22,29 +26,30 @@ namespace PoGoSlackBot.Walking
         public Position GetNextPosition()
         {
             bool starting = false;
-            if (currentPosition == -1)
+            if (currentIndex == -1)
             {
-                currentPosition = GetRandomPosition();
+                currentIndex = GetRandomPosition();
                 starting = true;
             }
+            
+            currentIndex++;
+            if (currentIndex >= positions.Count)
+                currentIndex = 0;
 
-            currentPosition++;
-            if (currentPosition >= positions.Count)
-                currentPosition = 0;
-
-            var position = positions[currentPosition];
+            var oldPosition = currentPosition;
+            currentPosition = positions[currentIndex];
 
             if (starting)
             {
-                log.Info("Starting to walk at {0}", position);
+                log.Info("Starting to walk at {0}", currentPosition);
             }
             else
             {
                 if (positions.Count > 1)
-                    log.Info("Walking to {0}", position);
+                    log.Info("Walking to {0} (Distance: {1}m)", currentPosition, oldPosition.DistanceTo(currentPosition));
             }
 
-            return position;
+            return currentPosition;
         }
 
         private int GetRandomPosition()

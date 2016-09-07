@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Slack.Webhooks;
-using POGOProtos.Map.Pokemon;
 using PoGoSlackBot.Configuration;
+using PoGoSlackBot.Entities;
 
 namespace PoGoSlackBot.Messages.Pokemon
 {
@@ -25,13 +25,13 @@ namespace PoGoSlackBot.Messages.Pokemon
             var slackAttachment = new SlackAttachment
             {
                 Color = "#ef7d00",
-                Fallback = String.Format("{0} is nearby.", nearbyPokemon.PokemonId),
+                Fallback = String.Format("{0} is nearby.", nearbyPokemon.PokemonID),
 
-                AuthorName = String.Format("{0} is nearby.", nearbyPokemon.PokemonId)
+                AuthorName = String.Format("{0} is nearby.", nearbyPokemon.PokemonID)
             };
 
             if (!String.IsNullOrWhiteSpace(configuration.MainConfiguration.ImageURLFormat))
-                slackAttachment.AuthorIcon = String.Format(configuration.MainConfiguration.ImageURLFormat, nearbyPokemon.PokemonId.ToString().ToLower());
+                slackAttachment.AuthorIcon = String.Format(configuration.MainConfiguration.ImageURLFormat, nearbyPokemon.PokemonID.ToString().ToLower());
 
             message.Attachments = new List<SlackAttachment> { slackAttachment };
 

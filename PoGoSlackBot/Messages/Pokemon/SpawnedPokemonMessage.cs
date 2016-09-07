@@ -33,8 +33,6 @@ namespace PoGoSlackBot.Messages.Pokemon
 
                 AuthorName = String.Format("Wild {0} has spawned!", spawnedPokemon.PokemonID),
 
-                Title = "View on map",
-                TitleLink = String.Format("http://maps.google.com/?q={0},{1}", spawnedPokemon.Latitude.ToString().Replace(",", "."), spawnedPokemon.Longitude.ToString().Replace(",", ".")),
                 Fields = new List<SlackField>
                 {
                     new SlackField

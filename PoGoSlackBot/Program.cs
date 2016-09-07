@@ -21,6 +21,8 @@ namespace PoGoSlackBot
             // create the new base service
             Program service = new Program();
 
+            POGOLib.Logging.LoggerConfiguration.MinimumLogLevel = POGOLib.Logging.LogLevel.Error;
+
             // check mode on the application, cmd or service
             if (Environment.UserInteractive)
             {

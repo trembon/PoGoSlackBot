@@ -190,6 +190,8 @@
     <Compile Include="Configuration\MainConfiguration.cs" />
     <Compile Include="DAL\PogoDB.cs" />
     <Compile Include="DAL\PogoDBContext.cs" />
+    <Compile Include="Entities\GymDetails.cs" />
+    <Compile Include="Entities\NearbyPokemon.cs" />
     <Compile Include="Handlers\PogoInstance.cs" />
     <Compile Include="Entities\SpawnedPokemon.cs" />
     <Compile Include="Extensions\TeamColorExtensions.cs" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeoCoordinatePortable;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,15 @@ namespace PoGoSlackBot.Walking
 
         public override string ToString()
         {
-            return String.Format("Lat {0}, Long {1}", Latitude, Longitude);
+            return $"Lat {Latitude}, Long {Longitude}";
+        }
+
+        public int DistanceTo(Position otherPosition)
+        {
+            GeoCoordinate otherPositionCoordinate = new GeoCoordinate(otherPosition.Latitude, otherPosition.Longitude);
+            GeoCoordinate currentPositionCoordinate = new GeoCoordinate(this.Latitude, this.Longitude);
+
+            return (int)currentPositionCoordinate.GetDistanceTo(otherPositionCoordinate);
         }
     }
 }

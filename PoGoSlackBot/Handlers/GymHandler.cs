@@ -7,6 +7,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using PoGoSlackBot.Entities;
+using PoGoSlackBot.Extensions;
 using PoGoSlackBot.Messages.Gym;
 using System;
 using System.Collections.Generic;
@@ -18,53 +19,63 @@ namespace PoGoSlackBot.Handlers
 {
     public class GymHandler
     {
-        private static readonly Logger log = LogManager.GetLogger("GymHandler");
+        private readonly Logger log;
 
         private PogoInstance pogoInstance;
 
-        private Dictionary<string, CachedGymData> cachedGyms;
+        private Dictionary<string, GymDetails> gymStatus;
 
         public GymHandler(PogoInstance pogoInstance)
         {
             this.pogoInstance = pogoInstance;
-            this.cachedGyms = new Dictionary<string, CachedGymData>();
+            this.log = LogManager.GetLogger($"GymHandler ({pogoInstance.Configuration.Name})");
+
+            this.gymStatus = pogoInstance.Database.GetLatestGymDetails();
         }
 
         public void Handle(FortData gym)
         {
-            if (!cachedGyms.ContainsKey(gym.Id))
+            if (!gymStatus.ContainsKey(gym.Id))
             {
-                cachedGyms.Add(gym.Id, new CachedGymData { GymData = gym });
+                var gymDetailsResponse = GetGymDetails(gym);
+                if(gymDetailsResponse != null)
+                {
+                    var gymDetails = new GymDetails(gym, gymDetailsResponse.Name, gymDetailsResponse.ImageUrls.FirstOrDefault(), pogoInstance.Configuration.Name);
+
+                    pogoInstance.Database.AddGymDetails(gymDetails);
+                    gymStatus.Add(gym.Id, gymDetails);
+                }
             }
             else
             {
-                var cachedData = cachedGyms[gym.Id];
+                var gymDetails = gymStatus[gym.Id];
 
-                if (cachedData.GymDetails == null)
-                {
-                    cachedData.GymDetails = GetGymDetails(gym);
-                    if (cachedData.GymDetails == null)
-                        return;
-                }
+                bool isInBattle = gym.IsInBattle && !gymDetails.IsInBattle;
+                bool isNowNeutral = gym.OwnedByTeam == TeamColor.Neutral && gymDetails.Owner != TeamColor.Neutral;
+                bool hasChangedOwner = gym.OwnedByTeam != gymDetails.Owner;
+
+                gymDetails.Update(gym);
+                pogoInstance.Database.UpdateGymDetails(gymDetails);
 
                 Messages.IMessage message = null;
-                if (gym.IsInBattle && !cachedData.GymData.IsInBattle)
+                if (isInBattle)
                 {
-                    message = new GymUnderAttackMessage(gym, cachedData.GymDetails, pogoInstance.Configuration);
+                    log.Info($"Gym, {gymDetails.Name}, is under attack");
+                    message = new GymUnderAttackMessage(gymDetails, pogoInstance.Configuration);
                 }
-                else if (gym.OwnedByTeam == TeamColor.Neutral && cachedData.GymData.OwnedByTeam != TeamColor.Neutral)
+                else if (isNowNeutral)
                 {
-                    message = new GymNeutralMessage(gym, cachedData.GymDetails, pogoInstance.Configuration);
+                    log.Info($"Gym, {gymDetails.Name}, is now neutral");
+                    message = new GymNeutralMessage(gymDetails, pogoInstance.Configuration);
                 }
-                else if (gym.OwnedByTeam != cachedData.GymData.OwnedByTeam)
+                else if (hasChangedOwner)
                 {
-                    message = new GymHasBeenTakenMessage(gym, cachedData.GymDetails, pogoInstance.Configuration);
+                    log.Info($"Gym, {gymDetails.Name}, has been taken by {gymDetails.Owner.ToTeamName()}");
+                    message = new GymHasBeenTakenMessage(gymDetails, pogoInstance.Configuration);
                 }
 
                 if (message != null)
                     message.Send();
-
-                cachedData.GymData = gym;
             }
         }
 
@@ -90,13 +101,6 @@ namespace PoGoSlackBot.Handlers
                 log.Error(ex, "Unable to fetch gym details.");
                 return null;
             }
-        }
-
-        private class CachedGymData
-        {
-            public FortData GymData { get; set; }
-
-            public FortDetailsResponse GymDetails { get; set; }
         }
     }
 }

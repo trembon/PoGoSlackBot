@@ -2,6 +2,7 @@
 using POGOLib.Pokemon;
 using POGOProtos.Map.Fort;
 using PoGoSlackBot.Configuration;
+using PoGoSlackBot.DAL;
 using PoGoSlackBot.Entities;
 using PoGoSlackBot.Handlers;
 using PoGoSlackBot.Walking;
@@ -25,10 +26,14 @@ namespace PoGoSlackBot.Handlers
 
         public InstanceConfiguration Configuration { get; }
 
+        public PogoDB Database { get; }
+
         public PogoInstance(InstanceConfiguration configuration, Session session, Walker walker)
         {
             this.Configuration = configuration;
             this.Session = session;
+
+            this.Database = new PogoDB(this.Configuration.Name);
 
             this.Walker = walker;
             this.GymHandler = new GymHandler(this);
@@ -53,7 +58,9 @@ namespace PoGoSlackBot.Handlers
 
             if (Configuration.ProcessNearbyPokemon)
             {
-                var nearbyPokemons = map.Cells.SelectMany(c => c.NearbyPokemons).ToList();
+                PokemonHandler.CleanNearbyPokemonList();
+
+                var nearbyPokemons = map.Cells.SelectMany(c => c.NearbyPokemons).Select(p => new NearbyPokemon(p, Configuration.Name, Session.Player.Latitude, Session.Player.Longitude)).ToList();
                 foreach (var pokemon in nearbyPokemons)
                     PokemonHandler.HandleNearbyPokemon(pokemon);
             }

@@ -1,6 +1,7 @@
 ﻿using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PoGoSlackBot.Configuration;
+using PoGoSlackBot.Entities;
 using PoGoSlackBot.Extensions;
 using Slack.Webhooks;
 using System;
@@ -13,12 +14,10 @@ namespace PoGoSlackBot.Messages.Gym
 {
     public class GymNeutralMessage : BaseMessage
     {
-        private FortData mapGymData;
-        private FortDetailsResponse gymDetails;
+        private GymDetails gymDetails;
 
-        public GymNeutralMessage(FortData mapGymData, FortDetailsResponse gymDetails, InstanceConfiguration configuration) : base(configuration)
+        public GymNeutralMessage(GymDetails gymDetails, InstanceConfiguration configuration) : base(configuration)
         {
-            this.mapGymData = mapGymData;
             this.gymDetails = gymDetails;
         }
 
@@ -33,7 +32,7 @@ namespace PoGoSlackBot.Messages.Gym
 
                 AuthorName = String.Format("Gym, {0}, is now neutral.", gymDetails.Name),
 
-                ThumbUrl = gymDetails.ImageUrls.FirstOrDefault(),
+                ThumbUrl = gymDetails.ImageURL,
             };
 
             if (!String.IsNullOrWhiteSpace(configuration.MainConfiguration.MapURLFormat))

@@ -38,11 +38,14 @@ namespace PoGoSlackBot.Entities
         [Column("encountered")]
         public DateTime Encountered { get; set; }
 
-        public SpawnedPokemon(string instanceName)
+        public SpawnedPokemon()
+        {
+            this.Encountered = DateTime.Now;
+        }
+
+        public SpawnedPokemon(string instanceName) : this()
         {
             this.InstanceName = instanceName;
-
-            this.Encountered = DateTime.Now;
         }
 
         public SpawnedPokemon(WildPokemon wildPokemon, string instanceName) : this(instanceName)

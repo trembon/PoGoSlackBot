@@ -11,13 +11,15 @@ namespace PoGoSlackBot.Messages
 {
     public abstract class BaseMessage : IMessage
     {
-        protected static readonly Logger log = LogManager.GetLogger("Message");
+        protected readonly Logger log;
 
         protected InstanceConfiguration configuration;
 
         public BaseMessage(InstanceConfiguration configuration)
         {
             this.configuration = configuration;
+
+            this.log = LogManager.GetLogger($"Message ({configuration.Name})");
         }
         
         protected virtual SlackMessage CreateMessage()
