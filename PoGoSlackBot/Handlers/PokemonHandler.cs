@@ -37,7 +37,7 @@ namespace PoGoSlackBot.Handlers
                 this.pogoInstance.Database.AddPokemonSpawn(spawnedPokemon);
 
                 log.Info($"Pokemon, {spawnedPokemon.PokemonID.ToString()}, spawned at long:{spawnedPokemon.Longitude},lat:{spawnedPokemon.Latitude}");
-                var message = new SpawnedPokemonMessage(spawnedPokemon, nearbyEncounters.ContainsKey(spawnedPokemon.EncounterID), pogoInstance.Configuration);
+                var message = new SpawnedPokemonMessage(spawnedPokemon, pogoInstance.Configuration);
                 message.Send();
 
                 spawnedEncounters[spawnedPokemon.SpawnPointID] = spawnedPokemon;

@@ -9,9 +9,14 @@
       "Password": "superSecretPassword1!",
       "ProcessNearbyPokemon": true,
       "ProcessGyms": true,
+      "IgnoreGymUnderAttack": true,
       "SlackWebHookURL": "https://hooks.slack.com/services/[randomletts]",
       "SlackChannel": "#pokemongo",
       "SlackBotName": "Pokemon GO Scanner",
+      "HomePosition": {
+        "Latitude": 40.766844,
+		"Longitude": -73.979166
+      },
       "WalkingPoints": [
         {
           "Latitude": 40.766844,

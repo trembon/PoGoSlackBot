@@ -14,12 +14,10 @@ namespace PoGoSlackBot.Messages.Pokemon
     public class SpawnedPokemonMessage : BaseMessage
     {
         private SpawnedPokemon spawnedPokemon;
-        private bool wasNearby;
 
-        public SpawnedPokemonMessage(SpawnedPokemon spawnedPokemon, bool wasNearby, InstanceConfiguration configuration) : base(configuration)
+        public SpawnedPokemonMessage(SpawnedPokemon spawnedPokemon, InstanceConfiguration configuration) : base(configuration)
         {
             this.spawnedPokemon = spawnedPokemon;
-            this.wasNearby = wasNearby;
         }
 
         protected override SlackMessage CreateMessage()
@@ -53,12 +51,12 @@ namespace PoGoSlackBot.Messages.Pokemon
                 slackAttachment.TitleLink = String.Format(configuration.MainConfiguration.MapURLFormat, spawnedPokemon.Latitude.ToString().Replace(",", "."), spawnedPokemon.Longitude.ToString().Replace(",", "."));
             }
 
-            if (configuration.ProcessNearbyPokemon)
+            if (configuration.HomePosition != null)
             {
                 slackAttachment.Fields.Add(new SlackField
                 {
-                    Title = "Was nearby",
-                    Value = wasNearby ? "Yes" : "No",
+                    Title = "Distance",
+                    Value = $"{configuration.HomePosition.DistanceTo(spawnedPokemon.Latitude, spawnedPokemon.Longitude)}m",
                     Short = true
                 });
             }

@@ -60,8 +60,11 @@ namespace PoGoSlackBot.Handlers
                 Messages.IMessage message = null;
                 if (isInBattle)
                 {
-                    log.Info($"Gym, {gymDetails.Name}, is under attack");
-                    message = new GymUnderAttackMessage(gymDetails, pogoInstance.Configuration);
+                    if (!pogoInstance.Configuration.IgnoreGymUnderAttack)
+                    {
+                        log.Info($"Gym, {gymDetails.Name}, is under attack");
+                        message = new GymUnderAttackMessage(gymDetails, pogoInstance.Configuration);
+                    }
                 }
                 else if (isNowNeutral)
                 {

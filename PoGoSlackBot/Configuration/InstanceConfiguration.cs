@@ -22,11 +22,15 @@ namespace PoGoSlackBot.Configuration
 
         public bool ProcessGyms { get; set; }
 
+        public bool IgnoreGymUnderAttack { get; set; }
+
         public string SlackWebHookURL { get; set; }
 
         public string SlackChannel { get; set; }
 
         public string SlackBotName { get; set; }
+
+        public Position HomePosition { get; set; }
 
         public PositionList WalkingPoints { get; set; }
 
@@ -35,6 +39,7 @@ namespace PoGoSlackBot.Configuration
         public InstanceConfiguration()
         {
             WalkingPoints = new PositionList();
+            HomePosition = null;
         }
     }
 }

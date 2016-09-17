@@ -25,5 +25,10 @@ namespace PoGoSlackBot.Walking
 
             return (int)currentPositionCoordinate.GetDistanceTo(otherPositionCoordinate);
         }
+
+        public int DistanceTo(double latitude, double longitude)
+        {
+            return this.DistanceTo(new Position { Latitude = latitude, Longitude = longitude });
+        }
     }
 }
