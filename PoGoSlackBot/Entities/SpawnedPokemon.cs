@@ -57,7 +57,10 @@ namespace PoGoSlackBot.Entities
             this.Latitude = wildPokemon.Latitude;
             this.Longitude = wildPokemon.Longitude;
 
-            this.Despawn = DateTime.Now.AddMilliseconds(wildPokemon.TimeTillHiddenMs);
+            if (wildPokemon.TimeTillHiddenMs > -1)
+                this.Despawn = DateTime.Now.AddMilliseconds(wildPokemon.TimeTillHiddenMs);
+            else
+                this.Despawn = DateTime.MinValue;
         }
 
         public SpawnedPokemon(MapPokemon mapPokemon, string instanceName) : this(instanceName)
@@ -69,8 +72,15 @@ namespace PoGoSlackBot.Entities
             this.Latitude = mapPokemon.Latitude;
             this.Longitude = mapPokemon.Longitude;
 
-            DateTime utcStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            this.Despawn = utcStart.AddMilliseconds(mapPokemon.ExpirationTimestampMs).ToLocalTime();
+            if (mapPokemon.ExpirationTimestampMs > -1)
+            {
+                DateTime utcStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                this.Despawn = utcStart.AddMilliseconds(mapPokemon.ExpirationTimestampMs).ToLocalTime();
+            }
+            else
+            {
+                this.Despawn = DateTime.MinValue;
+            }
         }
     }
 }

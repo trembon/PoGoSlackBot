@@ -1,4 +1,4 @@
-﻿using POGOLib.Pokemon.Data;
+﻿using POGOLib.Net.Authentication.Providers;
 using PoGoSlackBot.Walking;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace PoGoSlackBot.Configuration
     {
         public string Name { get; set; }
 
-        public LoginProvider LoginProvider { get; set; }
+        public string LoginProvider { get; set; }
 
         public string Username { get; set; }
 
@@ -40,6 +40,22 @@ namespace PoGoSlackBot.Configuration
         {
             WalkingPoints = new PositionList();
             HomePosition = null;
+        }
+
+        public ILoginProvider GetLoginProvider()
+        {
+            switch (LoginProvider.ToLower())
+            {
+                case "pokemontrainerclub":
+                case "ptc":
+                    return new PtcLoginProvider(this.Username, this.Password);
+
+                case "googleauth":
+                case "google":
+                    return null;
+
+                default: return null;
+            }
         }
     }
 }

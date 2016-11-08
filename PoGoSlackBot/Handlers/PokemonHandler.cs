@@ -44,6 +44,10 @@ namespace PoGoSlackBot.Handlers
                 if (!nearbyEncounters.ContainsKey(spawnedPokemon.EncounterID))
                     nearbyEncounters.Add(spawnedPokemon.EncounterID, spawnedPokemon.Encountered);
             }
+            else
+            {
+                this.pogoInstance.Database.UpdatePokemonSpawn(spawnedPokemon);
+            }
         }
 
         public void HandleNearbyPokemon(NearbyPokemon nearbyPokemon)

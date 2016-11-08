@@ -23,16 +23,20 @@ namespace PoGoSlackBot
                 var walker = new Walker(instance.Name, instance.WalkingPoints);
                 var startPosition = walker.GetNextPosition();
 
-                var session = Login.GetSession(instance.Username, instance.Password, instance.LoginProvider, startPosition.Latitude, startPosition.Longitude);
-
-                var pogoInstance = new PogoInstance(instance, session, walker);
-                pogoInstances.Add(pogoInstance);
+                Login.GetSession(instance.GetLoginProvider(), startPosition.Latitude, startPosition.Longitude).ContinueWith(x =>
+                {
+                    var pogoInstance = new PogoInstance(instance, x.Result, walker);
+                    pogoInstance.Session.StartupAsync().ContinueWith(y =>
+                    {
+                        pogoInstances.Add(pogoInstance);
+                    });
+                });
             }
         }
 
         public void Start()
         {
-            pogoInstances.ForEach(i => i.Session.Startup());
+            //pogoInstances.ForEach(i => i.Session.StartupAsync().Start());
         }
 
         public void Stop()

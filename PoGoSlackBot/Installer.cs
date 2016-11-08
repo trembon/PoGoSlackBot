@@ -28,7 +28,8 @@ namespace PoGoSlackBot
             // create the service installer
             service = new ServiceInstaller();
             service.StartType = ServiceStartMode.Automatic;
-            service.ServiceName = "Pokemon GO - Slack Bot";
+            service.ServiceName = Program.SERVICE_NAME;
+            service.Description = "A Pokemon GO Slack bot that will scan for Pokemon for your slack channel";
 
             // install the process and the service
             Installers.Add(process);

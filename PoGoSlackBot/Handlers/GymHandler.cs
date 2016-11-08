@@ -33,11 +33,11 @@ namespace PoGoSlackBot.Handlers
             this.gymStatus = pogoInstance.Database.GetLatestGymDetails();
         }
 
-        public void Handle(FortData gym)
+        public async Task Handle(FortData gym)
         {
             if (!gymStatus.ContainsKey(gym.Id))
             {
-                var gymDetailsResponse = GetGymDetails(gym);
+                var gymDetailsResponse = await GetGymDetails(gym);
                 if(gymDetailsResponse != null)
                 {
                     var gymDetails = new GymDetails(gym, gymDetailsResponse.Name, gymDetailsResponse.ImageUrls.FirstOrDefault(), pogoInstance.Configuration.Name);
@@ -82,11 +82,11 @@ namespace PoGoSlackBot.Handlers
             }
         }
 
-        private FortDetailsResponse GetGymDetails(FortData gymData)
+        private async Task<FortDetailsResponse> GetGymDetails(FortData gymData)
         {
             try
             {
-                var fortDetailsBytes = pogoInstance.Session.RpcClient.SendRemoteProcedureCall(new Request
+                var fortDetailsBytes = await pogoInstance.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.FortDetails,
                     RequestMessage = new FortDetailsMessage

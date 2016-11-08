@@ -42,6 +42,32 @@ namespace PoGoSlackBot.DAL
             }
         }
 
+        public void UpdatePokemonSpawn(SpawnedPokemon spawnedPokemon)
+        {
+            if (spawnedPokemon.Despawn < DateTime.MinValue)
+                return;
+
+            try
+            {
+                lock (dbLock)
+                {
+                    using (var context = new PogoDBContext())
+                    {
+                        var pokemonSpawn = context.PokemonSpawns.FirstOrDefault(ps => ps.EncounterID == spawnedPokemon.EncounterID);
+                        if (pokemonSpawn == null)
+                            return;
+
+                        pokemonSpawn.Despawn = pokemonSpawn.Despawn;
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Failed to update pokemon spawn in database.");
+            }
+        }
+
         public Dictionary<string, SpawnedPokemon> GetLatestSpawnData()
         {
             try

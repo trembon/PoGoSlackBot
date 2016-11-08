@@ -31,15 +31,7 @@ namespace PoGoSlackBot.Messages.Pokemon
 
                 AuthorName = String.Format("Wild {0} has spawned!", spawnedPokemon.PokemonID),
 
-                Fields = new List<SlackField>
-                {
-                    new SlackField
-                    {
-                        Title = "Despawning",
-                        Value = spawnedPokemon.Despawn.ToString(),
-                        Short = true
-                    }
-                }
+                Fields = new List<SlackField>()
             };
             
             if (!String.IsNullOrWhiteSpace(configuration.MainConfiguration.ImageURLFormat))
@@ -60,6 +52,17 @@ namespace PoGoSlackBot.Messages.Pokemon
                     Short = true
                 });
             }
+
+            // TODO: add logic to caclulate this from the database
+            //if (true)
+            //{
+            //    slackAttachment.Fields.Add(new SlackField
+            //    {
+            //        Title = "Despawning",
+            //        Value = spawnedPokemon.Despawn.ToString(),
+            //        Short = true
+            //    });
+            //}
 
             message.Attachments = new List<SlackAttachment> { slackAttachment };
 
