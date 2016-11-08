@@ -52,7 +52,7 @@ namespace PoGoSlackBot.Configuration
 
                 case "googleauth":
                 case "google":
-                    return null;
+                    throw new NotSupportedException("Google login not yet supported");
 
                 default: return null;
             }

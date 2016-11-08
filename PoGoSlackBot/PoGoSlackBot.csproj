@@ -207,19 +207,22 @@
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Messages\Pokemon\NearbyPokemonMessage.cs" />
     <Compile Include="Messages\Pokemon\SpawnedPokemonMessage.cs" />
-    <Compile Include="PokemonGoService.cs" />
-    <Compile Include="Program.cs">
+    <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Walking\Position.cs" />
     <Compile Include="Walking\PositionList.cs" />
     <Compile Include="Walking\Walker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
     <None Include="settings.json">

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ServiceProcess;
 
 namespace PoGoSlackBot
 {
@@ -28,8 +23,8 @@ namespace PoGoSlackBot
             // create the service installer
             service = new ServiceInstaller();
             service.StartType = ServiceStartMode.Automatic;
-            service.ServiceName = Program.SERVICE_NAME;
-            service.Description = "A Pokemon GO Slack bot that will scan for Pokemon for your slack channel";
+            service.ServiceName = Service.SERVICE_NAME;
+            service.Description = Service.SERVICE_DESC;
 
             // install the process and the service
             Installers.Add(process);
